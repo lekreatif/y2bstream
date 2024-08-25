@@ -5,51 +5,50 @@ import { config } from '../config/config';
 import logger from '../utils/logger';
 
 export class FileManager {
-  private outputFiles: string[] = [];
+  private files: string[] = [];
   private watcher!: chokidar.FSWatcher;
 
   constructor() {
-    this.loadOutputFiles();
-    this.watchOutputFolder();
+    this.loadFiles();
+    this.watchDirectory();
   }
 
-  private loadOutputFiles(): void {
-    this.outputFiles = fs.readdirSync(config.directories.output)
-      .filter(file => file.endsWith('.mp4'))
-      .map(file => path.join(config.directories.output, file));
-
-    logger.info(`Loaded ${this.outputFiles.length} output files`);
+  private loadFiles(): void {
+    this.files = fs
+      .readdirSync(config.directories.output)
+      .filter((file) => file.endsWith('.mp4'))
+      .map((file) => path.join(config.directories.output, file));
+    logger.info(`Loaded ${this.files.length} video files`);
   }
 
-  private watchOutputFolder(): void {
+  private watchDirectory(): void {
     this.watcher = chokidar.watch(config.directories.output, {
-      ignored: /(^|[\/\\])\../,
-      persistent: true
+      ignored: /(^|[\/\\])\../, // ignore dotfiles
+      persistent: true,
     });
 
     this.watcher
       .on('add', (filePath) => {
         if (path.extname(filePath) === '.mp4') {
-          logger.info(`New file detected: ${filePath}`);
-          this.outputFiles.push(filePath);
+          this.files.push(filePath);
+          logger.info(`New file added: ${filePath}`);
         }
       })
       .on('unlink', (filePath) => {
-        if (path.extname(filePath) === '.mp4') {
+        const index = this.files.indexOf(filePath);
+        if (index > -1) {
+          this.files.splice(index, 1);
           logger.info(`File removed: ${filePath}`);
-          this.outputFiles = this.outputFiles.filter(file => file !== filePath);
         }
       });
   }
 
-  public getNextOutputFile(): string {
-    if (this.outputFiles.length === 0) {
-      throw new Error('No output files available');
+  public getNextFile(): string {
+    if (this.files.length === 0) {
+      throw new Error('No video files available');
     }
-
-    const file = this.outputFiles.shift()!;
-    this.outputFiles.push(file);
-
+    const file = this.files.shift()!;
+    this.files.push(file);
     return file;
   }
 

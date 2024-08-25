@@ -1,115 +1,55 @@
 import { spawn } from 'child_process';
-import path from 'path';
-import fs from 'fs';
 import { config } from '../config/config';
 import logger from '../utils/logger';
 import { FileProcessingError } from '../utils/errors';
 
 export class StreamProcessor {
-  constructor() {
-    // Ensure output directory exists
-    if (!fs.existsSync(config.directories.output)) {
-      fs.mkdirSync(config.directories.output, { recursive: true });
-      logger.info(`Created output directory: ${config.directories.output}`);
+  private currentProcess: any;
+
+  public async streamToYouTube(getNextFile: () => string, streamUrl: string): Promise<void> {
+    const streamFile = async () => {
+      const inputFile = getNextFile();
+      logger.info(`Streaming: ${inputFile}`);
+
+      return new Promise<void>((resolve, reject) => {
+        this.currentProcess = spawn('ffmpeg', [
+          '-re',
+          '-i',
+          inputFile,
+          '-c',
+          'copy',
+          '-f',
+          'flv',
+          streamUrl,
+        ]);
+
+        this.currentProcess.stderr.on('data', (data: any) => {
+          logger.debug(`FFmpeg output: ${data.toString()}`);
+        });
+
+        this.currentProcess.on('close', (code: number) => {
+          if (code === 0) {
+            resolve();
+          } else {
+            reject(new FileProcessingError(`FFmpeg process exited with code ${code}`));
+          }
+        });
+      });
+    };
+
+    while (true) {
+      try {
+        await streamFile();
+      } catch (error) {
+        logger.error('Error during streaming:', error);
+        await new Promise((resolve) => setTimeout(resolve, 5000));
+      }
     }
   }
-  public async processMedia(song: string, video: string): Promise<string> {
-    const outputFile = path.resolve(config.directories.output, `output_${Date.now()}.mp4`);
 
-    return new Promise((resolve, reject) => {
-      const ffmpeg = spawn('ffmpeg', [
-        '-i',
-        path.resolve(config.directories.videos, video),
-        '-i',
-        path.resolve(config.directories.songs, song),
-        '-c:v',
-        'libx264',
-        '-c:a',
-        'aac',
-        '-b:a',
-        config.ffmpeg.audioBitrate,
-        '-shortest',
-        outputFile,
-      ]);
-
-      let ffmpegOutput = '';
-
-      ffmpeg.stdout.on('data', (data) => {
-        ffmpegOutput += data.toString();
-      });
-
-      ffmpeg.stderr.on('data', (data) => {
-        ffmpegOutput += data.toString();
-      });
-
-      ffmpeg.on('close', (code) => {
-        if (code === 0) {
-          logger.info(`Successfully processed: ${song} + ${video}`);
-          resolve(outputFile);
-        } else {
-          logger.error(`FFmpeg process exited with code ${code}. Output: ${ffmpegOutput}`);
-          logger.error(`Command: ffmpeg ${ffmpeg.spawnargs.join(' ')}`);
-          logger.error(`Output file path: ${outputFile}`);
-          logger.error(`Directory exists: ${fs.existsSync(path.dirname(outputFile))}`);
-          logger.error(
-            `Directory writable: ${fs.accessSync(path.dirname(outputFile), fs.constants.W_OK)}`,
-          );
-          reject(new FileProcessingError(`FFmpeg process exited with code ${code}`));
-        }
-      });
-    });
-  }
-
-  public async streamToYouTube(inputFile: string, streamUrl: string): Promise<void> {
-    return new Promise((resolve, reject) => {
-      // Check if inputFile is already an absolute path
-      const fullInputPath = path.isAbsolute(inputFile) ? inputFile : path.join(config.directories.output, inputFile);
-
-      const ffmpeg = spawn('ffmpeg', [
-        '-re',
-        '-i', fullInputPath,  // Use the corrected input file path
-        '-c:v', 'libx264',
-        '-preset', 'veryfast',
-        '-maxrate', '4000k',
-        '-bufsize', '8000k',
-        '-pix_fmt', 'yuv420p',
-        '-g', '60',
-        '-keyint_min', '60',
-        '-c:a', 'aac',
-        '-b:a', '160k',
-        '-ar', '44100',
-        '-f', 'flv',
-        streamUrl
-      ]);
-
-      let ffmpegOutput = '';
-
-      ffmpeg.stdout.on('data', (data) => {
-        ffmpegOutput += data.toString();
-      });
-
-      ffmpeg.stderr.on('data', (data) => {
-        ffmpegOutput += data.toString();
-      });
-
-      ffmpeg.on('close', (code) => {
-        if (code === 0) {
-          logger.info('Streaming process completed successfully');
-          resolve();
-        } else {
-          logger.error(`Streaming process exited with code ${code}. Output: ${ffmpegOutput}`);
-          reject(new FileProcessingError(`Streaming process exited with code ${code}`));
-        }
-      });
-    });
-  }
-
-  public cleanupOutputFile(outputFile: string): void {
-    try {
-      fs.unlinkSync(outputFile);
-      logger.info(`Cleaned up temporary file: ${outputFile}`);
-    } catch (error) {
-      logger.error(`Failed to clean up file ${outputFile}:`, error);
+  public stopStreaming(): void {
+    if (this.currentProcess) {
+      this.currentProcess.kill('SIGINT');
     }
   }
 }
