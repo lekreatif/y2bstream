@@ -14,7 +14,7 @@ export const config = {
   directories: {
     songs: path.join(__dirname, '../../media/songs'),
     videos: path.join(__dirname, '../../media/videos'),
-    output: path.join(__dirname, '../../../media'),
+    output: path.join(__dirname, process.env.OUTPUT_DIR || '.'),
   },
   ffmpeg: {
     videoBitrate: '4000k', // 3000 kbps

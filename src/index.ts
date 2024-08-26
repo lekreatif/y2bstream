@@ -5,6 +5,8 @@ import logger from './utils/logger';
 
 let isShuttingDown = false;
 
+const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+
 async function main() {
   const fileManager = new FileManager();
   const streamProcessor = new StreamProcessor();
@@ -19,6 +21,11 @@ async function main() {
     if (!streamUrl) throw new Error('YouTube stream URL not configured');
 
     await streamProcessor.streamToYouTube(() => fileManager.getNextFile(), streamUrl);
+
+    while (!isShuttingDown) {
+      fileManager.getNextFile();
+      await sleep(5000);
+    }
   } catch (error) {
     logger.error('Unhandled error in main function:', error);
     process.exit(1);

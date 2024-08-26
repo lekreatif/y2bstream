@@ -1,0 +1,30 @@
+{"level":"info","message":"Loaded 0 video files","timestamp":"2024-08-26T06:20:58.864Z"}
+{"level":"info","message":"Received SIGINT. Starting graceful shutdown...","timestamp":"2024-08-26T06:22:19.507Z"}
+{"level":"info","message":"Loaded 0 video files","timestamp":"2024-08-26T06:26:40.795Z"}
+{"level":"info","message":"Received SIGINT. Starting graceful shutdown...","timestamp":"2024-08-26T06:27:52.803Z"}
+{"level":"info","message":"Loaded 0 video files","timestamp":"2024-08-26T06:28:02.792Z"}
+{"level":"info","message":"New file added: /Users/mariegnangni/Gedeon/lekreatif/y2bstream/media/index.mp4","timestamp":"2024-08-26T06:29:31.248Z"}
+{"level":"info","message":"File removed: /Users/mariegnangni/Gedeon/lekreatif/y2bstream/media/index.mp4","timestamp":"2024-08-26T06:29:40.843Z"}
+{"level":"info","message":"Received SIGINT. Starting graceful shutdown...","timestamp":"2024-08-26T06:31:11.301Z"}
+{"level":"info","message":"Loaded 0 video files","timestamp":"2024-08-26T06:31:21.180Z"}
+{"level":"info","message":"Received SIGINT. Starting graceful shutdown...","timestamp":"2024-08-26T06:31:58.953Z"}
+{"level":"info","message":"Loaded 1 video files","timestamp":"2024-08-26T06:36:09.598Z"}
+{"level":"info","message":"New file added: /Users/mariegnangni/Gedeon/lekreatif/y2bstream/media/index.mp4","timestamp":"2024-08-26T06:36:09.611Z"}
+{"level":"info","message":"New file added: /Users/mariegnangni/Gedeon/lekreatif/y2bstream/media/2.mp4","timestamp":"2024-08-26T06:36:33.852Z"}
+{"level":"info","message":"File removed: /Users/mariegnangni/Gedeon/lekreatif/y2bstream/media/index.mp4","timestamp":"2024-08-26T06:37:39.119Z"}
+{"level":"info","message":"Received SIGINT. Starting graceful shutdown...","timestamp":"2024-08-26T06:38:45.040Z"}
+{"level":"info","message":"Loaded 1 video files","timestamp":"2024-08-26T06:39:01.767Z"}
+{"level":"info","message":"New file added: /Users/mariegnangni/Gedeon/lekreatif/y2bstream/media/2.mp4","timestamp":"2024-08-26T06:39:01.775Z"}
+{"level":"info","message":"New file added: /Users/mariegnangni/Gedeon/lekreatif/y2bstream/media/echo.mp4","timestamp":"2024-08-26T06:39:18.861Z"}
+{"level":"info","message":"Received SIGINT. Starting graceful shutdown...","timestamp":"2024-08-26T06:39:55.657Z"}
+{"level":"info","message":"Loaded 2 video files","timestamp":"2024-08-26T06:42:50.831Z"}
+{"level":"info","message":"New file added: /Users/mariegnangni/Gedeon/lekreatif/y2bstream/media/2.mp4","timestamp":"2024-08-26T06:42:50.839Z"}
+{"level":"info","message":"New file added: /Users/mariegnangni/Gedeon/lekreatif/y2bstream/media/echo.mp4","timestamp":"2024-08-26T06:42:50.839Z"}
+{"level":"info","message":"Received SIGINT. Starting graceful shutdown...","timestamp":"2024-08-26T06:43:54.881Z"}
+{"level":"info","message":"Loaded 2 video files","timestamp":"2024-08-26T06:44:17.731Z"}
+{"level":"info","message":"Received SIGINT. Starting graceful shutdown...","timestamp":"2024-08-26T06:45:16.830Z"}
+{"level":"info","message":"Loaded 2 video files","timestamp":"2024-08-26T06:47:46.482Z"}
+{"level":"info","message":"Initial scan complete. Ready for changes.","timestamp":"2024-08-26T06:47:46.491Z"}
+{"level":"info","message":"New file added: /Users/mariegnangni/Gedeon/lekreatif/y2bstream/media/3.mp4","timestamp":"2024-08-26T06:48:05.307Z"}
+{"level":"info","message":"File removed: /Users/mariegnangni/Gedeon/lekreatif/y2bstream/media/echo.mp4","timestamp":"2024-08-26T06:48:33.242Z"}
+{"level":"info","message":"Received SIGINT. Starting graceful shutdown...","timestamp":"2024-08-26T06:57:21.805Z"}

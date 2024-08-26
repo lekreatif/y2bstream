@@ -27,19 +27,26 @@ export class FileManager {
       persistent: true,
     });
 
+    let isInitialScanComplete = false;
+
     this.watcher
       .on('add', (filePath) => {
-        if (path.extname(filePath) === '.mp4') {
+        if (path.extname(filePath) === '.mp4' && !this.files.includes(filePath)) {
           this.files.push(filePath);
-          logger.info(`New file added: ${filePath}`);
+          if (isInitialScanComplete) {
+            logger.info(`New file added: ${filePath}`);
+          }
         }
       })
       .on('unlink', (filePath) => {
-        const index = this.files.indexOf(filePath);
-        if (index > -1) {
-          this.files.splice(index, 1);
-          logger.info(`File removed: ${filePath}`);
-        }
+        if (path.extname(filePath) !== '.mp4') return;
+        this.files = this.files.filter((file) => file !== filePath);
+        logger.info(`File removed: ${filePath}`);
+      })
+      .on('error', (error) => console.error(`Watcher error: ${error}`))
+      .on('ready', () => {
+        isInitialScanComplete = true;
+        logger.info('Initial scan complete. Ready for changes.');
       });
   }
 
