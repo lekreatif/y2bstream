@@ -47,7 +47,7 @@ export class YouTubeStreamer {
         requestBody: {
           id: youtubeApiConfig.broadcastId,
           snippet: {
-            title: title,
+            title: `Vous suivez actuellemnt ${title} - Cinéma & TV en direct 24h/7 - La chaîne des créateurs de contenu`,
           },
         },
       });
