@@ -10,9 +10,10 @@ export const config = {
     redirectUrl: process.env.YOUTUBE_REDIRECT_URL,
     refreshToken: process.env.YOUTUBE_REFRESH_TOKEN,
     streamUrl: process.env.YOUTUBE_STREAM_URL,
+    broadcastId: process.env.YOUTUBE_BROADCAST_ID,
   },
   directories: {
-    songs: path.join(__dirname, '../../media/songs'),
+    thunbnails: path.join(__dirname, '../../media/thumbnails'),
     videos: path.join(__dirname, '../../media/videos'),
     output: path.join(__dirname, process.env.OUTPUT_DIR || '.'),
   },
@@ -28,3 +29,17 @@ export const config = {
     port: 8081,
   },
 };
+
+export interface YouTubeApiConfig {
+  clientId: string | undefined;
+  clientSecret: string | undefined;
+  redirectUrl: string | undefined;
+  refreshToken: string | undefined;
+  streamUrl: string | undefined;
+  broadcastId: string | undefined; // Nouvelle ligne
+}
+
+// Assurez-vous que config.youtubeApi est de type YouTubeApiConfig
+const youtubeApiConfig: YouTubeApiConfig = config.youtubeApi;
+
+export { youtubeApiConfig };

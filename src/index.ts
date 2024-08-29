@@ -5,8 +5,6 @@ import logger from './utils/logger';
 
 let isShuttingDown = false;
 
-const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
-
 async function main() {
   const fileManager = new FileManager();
   const streamProcessor = new StreamProcessor();
@@ -20,12 +18,20 @@ async function main() {
     const streamUrl = youtubeStreamer.getStreamUrl();
     if (!streamUrl) throw new Error('YouTube stream URL not configured');
 
-    await streamProcessor.streamToYouTube(() => fileManager.getNextFile(), streamUrl);
+    // Fonction pour obtenir le prochain élément et mettre à jour le stream
+    const getNextItemAndUpdateStream = async () => {
+      const item = fileManager.getNextItem();
+      if (item.streamTitle) {
+        await youtubeStreamer.updateStreamTitle(item.streamTitle);
+      }
+      if (item.coverUrl) {
+        await youtubeStreamer.updateStreamThumbnail(item.coverUrl);
+      }
+      return item.videoPath;
+    };
 
-    while (!isShuttingDown) {
-      fileManager.getNextFile();
-      await sleep(5000);
-    }
+    // Lancer le streaming
+    await streamProcessor.streamToYouTube(getNextItemAndUpdateStream, streamUrl);
   } catch (error) {
     logger.error('Unhandled error in main function:', error);
     process.exit(1);

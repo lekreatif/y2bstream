@@ -2,13 +2,17 @@ import { spawn } from 'child_process';
 import { config } from '../config/config';
 import logger from '../utils/logger';
 import { FileProcessingError } from '../utils/errors';
+import path from 'path';
 
 export class StreamProcessor {
   private currentProcess: any;
 
-  public async streamToYouTube(getNextFile: () => string, streamUrl: string): Promise<void> {
+  public async streamToYouTube(
+    getNextFile: () => Promise<string>,
+    streamUrl: string
+  ): Promise<void> {
     const streamFile = async () => {
-      const inputFile = getNextFile();
+      const inputFile = path.join(config.directories.videos, await getNextFile());
       logger.info(`Streaming: ${inputFile}`);
 
       return new Promise<void>((resolve, reject) => {
@@ -18,12 +22,12 @@ export class StreamProcessor {
           inputFile,
           '-c:v',
           'copy',
-	  '-b:v',
-	  '7M',
-	  '-maxrate',
-	  '7M',
-	  '-bufsize',
-	  '2M',
+          '-b:v',
+          '7M',
+          '-maxrate',
+          '7M',
+          '-bufsize',
+          '2M',
           '-f',
           'flv',
           streamUrl,
