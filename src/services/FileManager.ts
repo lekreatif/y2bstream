@@ -5,7 +5,7 @@ import { config } from '../config/config';
 import logger from '../utils/logger';
 
 interface VideoItem {
-  videoPath: string;
+  fileName: string;
   streamTitle?: string;
   coverUrl?: string;
 }
@@ -16,6 +16,7 @@ export class FileManager {
   private queueFile: string;
 
   constructor() {
+    console.log('config.directories.output', config.directories.output);
     this.queueFile = path.join(config.directories.output, 'queue.json');
     this.loadQueue();
     this.watchQueue();

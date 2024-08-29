@@ -24,10 +24,11 @@ async function main() {
       if (item.streamTitle) {
         await youtubeStreamer.updateStreamTitle(item.streamTitle);
       }
-      if (item.coverUrl) {
-        await youtubeStreamer.updateStreamThumbnail(item.coverUrl);
-      }
-      return item.videoPath;
+      // if (item.coverUrl) {
+      //   await youtubeStreamer.updateStreamThumbnail(item.coverUrl);
+      //   logger.info(`Updated stream thumbnail to: ${item.coverUrl}`);
+      // }
+      return item.fileName;
     };
 
     // Lancer le streaming

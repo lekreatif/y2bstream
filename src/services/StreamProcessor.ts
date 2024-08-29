@@ -4,12 +4,14 @@ import logger from '../utils/logger';
 import { FileProcessingError } from '../utils/errors';
 import path from 'path';
 
+
+
 export class StreamProcessor {
   private currentProcess: any;
 
   public async streamToYouTube(
     getNextFile: () => Promise<string>,
-    streamUrl: string
+    streamUrl: string,
   ): Promise<void> {
     const streamFile = async () => {
       const inputFile = path.join(config.directories.videos, await getNextFile());
