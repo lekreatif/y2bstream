@@ -53,7 +53,7 @@ export class YouTubeStreamer {
       });
       logger.info(`Updated stream title to: ${title}`);
     } catch (error) {
-      logger.error('Failed to update stream title:', error);
+      logger.error(`Failed to update stream title ${title}: `, error);
       throw new YouTubeAPIError('Failed to update stream title');
     }
   }
